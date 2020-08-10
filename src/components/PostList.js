@@ -1,16 +1,40 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {fetchPost} from '../actions'
+import UserHeader from './UserHeader'
 
 class PostList extends React.Component{
 
     componentDidMount(){
-        return this.props.fetchPost
+       
+        return this.props.fetchPost()
+    }
+
+    rederList(){
+        return this.props.posts.map(post =>{
+            return(
+                <div className='item' key={post.id}>
+                    <i className='large middle aligned icon user'/>
+                    <div className='content'>
+                        <div className='description'>
+                          <h2>{post.title}</h2>
+                          <p>{post.body}</p>
+                        </div>
+                        <div><UserHeader userId={post.userId}/></div>
+                    </div>
+                </div>
+            )
+        })
     }
 
     render(){
-        return <div>PostList</div>
+        
+        return <div className='ui relaxed divided list'>{this.rederList()}</div>
     }
 }
 
-export default connect(null,{fetchPost : fetchPost})(PostList) 
+const mapStateToProps = state =>{
+    return { posts : state.posts}
+}
+
+export default connect(mapStateToProps,{fetchPost : fetchPost})(PostList) 
